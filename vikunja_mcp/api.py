@@ -40,6 +40,13 @@ class VikunjaClient:
     def create_project(self, data: dict) -> dict:
         return self.put("/projects", json=data)
 
+    def get_project_by_title(self, title: str) -> Optional[dict]:
+        projects = self.list_projects()
+        for p in projects:
+            if p.get("title") == title:
+                return p
+        return None
+
     def update_project(self, project_id: int, data: dict) -> dict:
         return self.put(f"/projects/{project_id}", json=data)
 
@@ -155,3 +162,11 @@ class VikunjaClient:
 
     def delete_team(self, team_id: int) -> bool:
         return self.delete(f"/teams/{team_id}")
+
+    def duplicate_project(self, project_id: int, parent_project_id: int) -> dict:
+        return self.put(f"/projects/{project_id}/duplicate", json={"parent_project_id": parent_project_id})
+
+    def move_project_to_parent(self, project_id: int, parent_project_id: int) -> dict:
+        result = self.duplicate_project(project_id, parent_project_id)
+        self.delete(project_id)
+        return result

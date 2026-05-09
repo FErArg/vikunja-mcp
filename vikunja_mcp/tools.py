@@ -11,12 +11,30 @@ def register_tools(mcp, client):
         return client.get_project(project_id)
 
     @mcp.tool()
-    def create_project(title: str, description: str = "", color: str = "#FFFFFF") -> dict:
-        return client.create_project({
+    def create_project(title: str, description: str = "", color: str = "#FFFFFF",
+                       parent_project_id: Optional[int] = None) -> dict:
+        """Create a new project.
+
+        Args:
+            title: The project title
+            description: Project description (default: "")
+            color: Hex color code (default: "#FFFFFF")
+            parent_project_id: If set, creates the project as a child of this parent.
+                               This is the recommended way to create child projects on
+                               servers where POST /projects/{id} returns 405 (cannot update
+                               parent_project_id on existing projects).
+
+        Returns:
+            The created project
+        """
+        data = {
             "title": title,
             "description": description,
             "color": color
-        })
+        }
+        if parent_project_id is not None:
+            data["parent_project_id"] = parent_project_id
+        return client.create_project(data)
 
     @mcp.tool()
     def update_project(project_id: int, title: Optional[str] = None,
@@ -306,3 +324,43 @@ def register_tools(mcp, client):
             True if deleted successfully
         """
         return client.delete_team(team_id)
+
+    @mcp.tool()
+    def duplicate_project(project_id: int, parent_project_id: int) -> dict:
+        """Duplicate a project into a parent project (creates a full copy).
+
+        Use this to establish parent-child hierarchy when PATCH /projects/{id}
+        fails with 405 Method Not Allowed (server doesn't allow updating
+        parent_project_id on existing projects).
+
+        The duplicate includes all tasks, labels, comments, attachments,
+        assignees, kanban data, user/team permissions and link shares.
+        Original project remains in place.
+
+        Args:
+            project_id: The ID of the project to duplicate
+            parent_project_id: The ID of the target parent project
+
+        Returns:
+            The duplicated project (now a child of parent_project_id)
+        """
+        return client.duplicate_project(project_id, parent_project_id)
+
+    @mcp.tool()
+    def move_project_to_parent(project_id: int, parent_project_id: int) -> dict:
+        """Move a project into a parent project via duplicate + delete.
+
+        Since Vikunja's POST /projects/{id} may return 405 Method Not Allowed
+        (cannot update parent_project_id on existing projects), this tool
+        establishes the parent-child relationship by:
+        1. Duplicating the project into the parent
+        2. Deleting the original project
+
+        Args:
+            project_id: The ID of the project to move
+            parent_project_id: The ID of the target parent project
+
+        Returns:
+            The duplicated project (now under parent_project_id)
+        """
+        return client.move_project_to_parent(project_id, parent_project_id)

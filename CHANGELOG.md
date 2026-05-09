@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.10] - 2026-05-09
+
+### Added
+
+- `create_project` docstring now explains `parent_project_id` usage
+- AGENTS.md documents correct child project creation (directly with `parent_project_id`, not via duplicate+delete)
+
+### Removed
+
+- `move_project_to_parent` from recommended workflow (results in "- duplicate" suffix, cannot rename on this server)
+
+### Notes
+
+- On this Vikunja server: POST /projects/{id} returns 405 (cannot update parent_project_id on existing projects)
+- Recommended: `create_project("name", parent_project_id=parent_id)` creates child directly with exact name
+
+## [0.0.9] - 2026-05-09
+
+### Added
+
+- `duplicate_project(project_id, parent_project_id)` — Duplicate a project into a parent project. Useful for establishing parent-child hierarchy when the server's POST /projects/{id} returns 405 Method Not Allowed (cannot update parent_project_id on existing projects).
+- `move_project_to_parent(project_id, parent_project_id)` — Wrapper that duplicates the project into parent and deletes the original (establishes hierarchy via copy+delete pattern).
+
+### Notes
+
+- The duplicate includes all tasks, labels, comments, attachments, assignees, kanban data, user/team permissions and link shares
+- Original project remains until manually deleted
+
 ## [0.0.7] - 2026-05-09
 
 ### Fixed

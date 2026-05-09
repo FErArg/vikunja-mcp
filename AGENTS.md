@@ -71,5 +71,16 @@ Vikunja servers that only allow GET and PUT methods require all create/update op
 | GET | `/teams/{id}` | Get team |
 | PUT | `/teams` | Create team |
 | DELETE | `/teams/{id}` | Delete team (may fail on PUT-only servers) |
-| POST | `/tasks/bulk` | Bulk update (not available if POST disabled) |
-| POST | `/notifications/read_all` | Mark all read (not available if POST disabled) |
+| PUT | `/projects/{id}/duplicate` | Duplicate project into a parent project (body: `{"parent_project_id": int}`) |
+
+### Important: Creating Child Projects
+
+On this Vikunja server, POST /projects/{id} returns 405 Method Not Allowed (cannot update parent_project_id on existing projects).
+
+**Correct approach:** Create the project directly with parent_project_id set:
+
+```
+create_project("child name", parent_project_id=parent_id)
+```
+
+**Do NOT use** `duplicate_project` + `delete_project` — it results in names like "child - duplicate" which cannot be renamed (PUT /projects/{id} = 405).

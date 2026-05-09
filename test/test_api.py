@@ -403,3 +403,20 @@ def test_delete_team(mock_request, client):
 
     mock_request.assert_called_once_with("DELETE", "https://vikunja.example.com/api/v1/teams/1")
     assert result is True
+
+
+@patch("requests.Session.request")
+def test_duplicate_project(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 2, "title": "Child Project", "parent_project_id": 1}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.duplicate_project(2, parent_project_id=1)
+
+    mock_request.assert_called_once_with(
+        "PUT",
+        "https://vikunja.example.com/api/v1/projects/2/duplicate",
+        json={"parent_project_id": 1}
+    )
+    assert result["parent_project_id"] == 1

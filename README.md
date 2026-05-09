@@ -1,12 +1,10 @@
 # vikunja-mcp
 
-**Version:** 0.0.7
-
-MCP (Model Context Protocol) server that connects an AI agent (OpenCode) to [Vikunja](https://vikunja.io/) project management system via its REST API.
+**Version:** 0.0.10
 
 ## Capabilities
 
-- **Projects:** List, create, read, update, delete
+- **Projects:** List, create, read, update, delete; create child projects directly with `parent_project_id`
 - **Tasks:** Full CRUD with comments, attachments, labels
 - **Labels:** Manage project and task labels
 - **Notifications:** Read and manage notifications

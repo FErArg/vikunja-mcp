@@ -76,8 +76,8 @@ This MCP client is designed to work with Vikunja servers that only allow GET and
 
 | Operation | HTTP Method | Endpoint |
 |-----------|-------------|----------|
-| Create project | PUT | `/projects` |
-| Update project | PUT | `/projects/{id}` |
+| Create project | PUT | `/projects` | body can include `parent_project_id` to create as child directly |
+| Update project | PUT | `/projects/{id}` | cannot change parent_project_id (405 on this server) |
 | Create task | PUT | `/projects/{id}/tasks` |
 | Update task | PUT | `/tasks/{id}` |
 | Create label | PUT | `/labels` |
@@ -95,6 +95,7 @@ This MCP client is designed to work with Vikunja servers that only allow GET and
 | Get team | GET | `/teams/{id}` |
 | Create team | PUT | `/teams` |
 | Delete team | DELETE | `/teams/{id}` |
+| Duplicate project | PUT | `/projects/{id}/duplicate` |
 | List projects/tasks/labels | GET | varies |
 
 **Not supported** (requires POST or DELETE on some Vikunja servers):
