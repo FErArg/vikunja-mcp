@@ -1,0 +1,120 @@
+# Installation Guide
+
+## Requirements
+
+- Python 3.11 or higher
+- Access to a Vikunja instance (self-hosted or Vikunja Cloud)
+- API token from your Vikunja instance
+
+**Note:** macOS ships with Python 3.9 by default. This project requires Python 3.11+. You must install a newer version before running the installer.
+
+## Quick Install
+
+```bash
+git clone <repo-url>
+cd vikunja-mcp
+./install.sh
+```
+
+The installer will:
+
+1. Detect your operating system (Linux/macOS) and verify Python 3.11+
+2. Create a virtual environment at `~/.vikunja-mcp/env/`
+3. Install the `vikunja_mcp` package in editable mode
+4. Copy the launcher script to `~/.vikunja-mcp/mcp/run_mcp.sh`
+5. Prompt for your Vikunja URL and API token
+6. Register the MCP server with OpenCode's `opencode.json`
+7. Test the connection to your Vikunja instance
+
+## Getting Your Vikunja API Token
+
+1. Log in to your Vikunja instance
+2. Go to Settings → API Token
+3. Create a new token
+4. Copy the token (you won't be able to see it again)
+
+## Manual Configuration
+
+If you need to reconfigure after installation, edit `~/.vikunja-mcp/config.json`:
+
+```json
+{
+  "vikunja_url": "https://your-vikunja.example.com",
+  "vikunja_token": "your-api-token-here"
+}
+```
+
+## Troubleshooting
+
+### Python version error
+
+```
+Error: Python 3.11+ required. Found: 3.9
+```
+
+Install Python 3.11+ via [python.org](https://www.python.org/downloads/) or your package manager (brew, apt, etc.).
+
+### ModuleNotFoundError: No module named 'vikunja_mcp'
+
+Re-run the installer. The v0.0.1 installer had a bug that skipped installing the package and copying the launcher script. Run `./install.sh` again to fix.
+
+### Connection refused
+
+Verify your Vikunja URL is correct and that your Vikunja instance is running. Check that the API token is valid.
+
+### OpenCode not finding the MCP server
+
+Make sure `~/.config/opencode/opencode.json` contains the `vikunja-mcp` entry under `mcp`. You can check with:
+
+```bash
+cat ~/.config/opencode/opencode.json | grep -A5 "vikunja-mcp"
+```
+
+## API Limitations
+
+This MCP client is designed to work with Vikunja servers that only allow GET and PUT methods (POST is disabled). All create and update operations use PUT:
+
+| Operation | HTTP Method | Endpoint |
+|-----------|-------------|----------|
+| Create project | PUT | `/projects` |
+| Update project | PUT | `/projects/{id}` |
+| Create task | PUT | `/projects/{id}/tasks` |
+| Update task | PUT | `/tasks/{id}` |
+| Create label | PUT | `/labels` |
+| Update label | PUT | `/labels/{id}` |
+| Add comment | PUT | `/tasks/{id}/comments` |
+| Set task labels | PUT | `/tasks/{id}/labels` |
+| Set task labels | PUT | `/tasks/{id}/labels` | body: `{"label_id": int}` |
+| Remove all task labels | DELETE | `/tasks/{id}/labels` | no body |
+| Remove single task label | DELETE | `/tasks/{id}/labels` | body: `{"label_id": int}` |
+| Get service info | GET | `/info` |
+| List all tasks | GET | `/tasks` |
+| List project members | GET | `/projects/{id}/projectusers` |
+| Add user to project | PUT | `/projects/{id}/projectusers` |
+| List teams | GET | `/teams` |
+| Get team | GET | `/teams/{id}` |
+| Create team | PUT | `/teams` |
+| Delete team | DELETE | `/teams/{id}` |
+| List projects/tasks/labels | GET | varies |
+
+**Not supported** (requires POST or DELETE on some Vikunja servers):
+
+| Operation | Reason |
+|-----------|--------|
+| Bulk task updates | Uses `POST /tasks/bulk` |
+| Mark all notifications read | Uses `POST /notifications/read_all` |
+| Delete subscriptions | Uses `DELETE /subscriptions/{entity}/{id}` |
+
+If your Vikunja server supports POST, these operations would also work normally.
+
+## Uninstallation
+
+```bash
+./uninstall.sh
+```
+
+This will remove:
+- `~/.vikunja-mcp/` directory (virtual environment and configuration)
+- MCP server registration from OpenCode
+
+Your Vikunja data is not affected.
