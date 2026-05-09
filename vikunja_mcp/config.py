@@ -28,6 +28,6 @@ class Config:
 
     def headers(self) -> dict:
         return {
-            "Authorization": f"Token {self.vikunja_token}",
+            "Authorization": f"Bearer {self.vikunja_token}",
             "Content-Type": "application/json"
         }

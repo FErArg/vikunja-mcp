@@ -144,7 +144,7 @@ fi
 
 echo "Testing connection to Vikunja API..."
 RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
-  -H "Authorization: Token $VIKUNJA_TOKEN" \
+  -H "Authorization: Bearer $VIKUNJA_TOKEN" \
   "$VIKUNJA_URL/api/v1/projects?page=1")
 
 if [ "$RESPONSE" = "200" ]; then
