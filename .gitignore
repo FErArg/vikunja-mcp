@@ -1,17 +1,57 @@
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
+*.pyo
+*.pyd
+.Python
 *.egg-info/
 *.egg
+*.whl
 .eggs/
 build/
 dist/
+develop-eggs/
+downloads/
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.hypothesis/
+
+# Virtual environments
 .env
 .venv
 env/
 venv/
-*.pyc
+venv.bak/
+ENV/
+env.bak/
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Testing
 .pytest_cache/
 .mypy_cache/
-.tox/
-.hypothesis/
+.coverage
+htmlcov/
+*.cover
+
+# Logs
+*.log
+
+# OS / Platform
+.DS_Store
+
+# Backups (from installer)
+*.bak
+
+# Local config (should stay in ~/.vikunja-mcp/, not repo)
+config.json
