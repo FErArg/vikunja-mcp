@@ -46,3 +46,5 @@ Unit tests in `test/`:
 - Venv created at `~/.vikunja-mcp/env/`
 - Launcher uses absolute path `~/.vikunja-mcp/mcp/run_mcp.sh` in opencode.json
 - Config file path passed as argument to server, never hardcoded
+- install.sh must run from the repo directory (uses `SCRIPT_DIR` to locate vikunja_mcp package and run_mcp.sh)
+- vikunja_mcp package installed via `pip install -e` in editable mode

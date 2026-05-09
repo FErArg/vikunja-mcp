@@ -1,6 +1,6 @@
 # vikunja-mcp
 
-**Version:** 0.0.1
+**Version:** 0.0.2
 
 MCP (Model Context Protocol) server that connects an AI agent (OpenCode) to [Vikunja](https://vikunja.io/) project management system via its REST API.
 
@@ -31,7 +31,15 @@ cd vikunja-mcp
 ./install.sh
 ```
 
-The installer will prompt for your Vikunja URL and API token.
+The installer will:
+
+1. Detect your OS (Linux/macOS) and verify Python 3.11+
+2. Create a virtual environment at `~/.vikunja-mcp/env/`
+3. Install the `vikunja_mcp` package and dependencies
+4. Copy the launcher script to `~/.vikunja-mcp/mcp/run_mcp.sh`
+5. Prompt for your Vikunja URL and API token
+6. Register the MCP server with OpenCode
+7. Test the connection to your Vikunja instance
 
 ## Uninstallation
 

@@ -52,6 +52,11 @@ echo "Installing dependencies..."
 source "$VENV_DIR/bin/activate"
 pip install --upgrade pip
 pip install -r "$SCRIPT_DIR/requirements.txt"
+pip install -e "$SCRIPT_DIR"
+
+echo "Copying launcher script..."
+cp "$SCRIPT_DIR/mcp/run_mcp.sh" "$VIKUNJA_MCP_DIR/mcp/"
+chmod +x "$VIKUNJA_MCP_DIR/mcp/run_mcp.sh"
 
 echo
 read -p "Vikunja URL (e.g. https://try.vikunja.io): " VIKUNJA_URL

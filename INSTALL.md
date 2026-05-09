@@ -18,12 +18,12 @@ cd vikunja-mcp
 
 The installer will:
 
-1. Detect your operating system (Linux/macOS)
-2. Verify Python 3.11+ is installed
-3. Create a virtual environment at `~/.vikunja-mcp/env/`
-4. Install dependencies
+1. Detect your operating system (Linux/macOS) and verify Python 3.11+
+2. Create a virtual environment at `~/.vikunja-mcp/env/`
+3. Install the `vikunja_mcp` package in editable mode
+4. Copy the launcher script to `~/.vikunja-mcp/mcp/run_mcp.sh`
 5. Prompt for your Vikunja URL and API token
-6. Register the MCP server with OpenCode
+6. Register the MCP server with OpenCode's `opencode.json`
 7. Test the connection to your Vikunja instance
 
 ## Getting Your Vikunja API Token
@@ -49,10 +49,14 @@ If you need to reconfigure after installation, edit `~/.vikunja-mcp/config.json`
 ### Python version error
 
 ```
-Python 3.11+ required. Version current: 3.9
+Error: Python 3.11+ required. Found: 3.9
 ```
 
 Install Python 3.11+ via [python.org](https://www.python.org/downloads/) or your package manager (brew, apt, etc.).
+
+### ModuleNotFoundError: No module named 'vikunja_mcp'
+
+Re-run the installer. The v0.0.1 installer had a bug that skipped installing the package and copying the launcher script. Run `./install.sh` again to fix.
 
 ### Connection refused
 
