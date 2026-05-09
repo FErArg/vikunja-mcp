@@ -60,8 +60,9 @@ Vikunja servers that only allow GET and PUT methods require all create/update op
 | PUT | `/labels` | Create label |
 | PUT | `/tasks/{id}/comments` | Add comment |
 | PUT | `/tasks/{id}/attachments` | Upload attachment |
-| PUT | `/tasks/{id}/labels` | Set task labels |
-| DELETE | `/tasks/{id}/labels` | Remove all labels from task (may fail on PUT-only servers) |
+| PUT | `/tasks/{id}/labels` | Set task labels (body: `{"label_id": int}`) |
+| DELETE | `/tasks/{id}/labels` | Remove all labels from task (no body) |
+| DELETE | `/tasks/{id}/labels` | Remove single label (body: `{"label_id": int}`) |
 | GET | `/info` | Get Vikunja service info (version, frontend URL) |
 | GET | `/tasks` | List all tasks (across all projects) |
 | GET | `/projects/{id}/projectusers` | List project members |

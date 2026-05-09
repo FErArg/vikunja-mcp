@@ -117,17 +117,30 @@ def register_tools(mcp, client):
         return client.delete_label(label_id)
 
     @mcp.tool()
-    def add_label_to_task(task_id: int, label_ids: list[int]) -> dict:
-        """Associate labels to a task. Replaces all existing labels on the task.
+    def add_label_to_task(task_id: int, label_id: int) -> dict:
+        """Associate a single label to a task.
 
         Args:
             task_id: The ID of the task
-            label_ids: List of label IDs to associate with the task
+            label_id: The ID of the label to add
 
         Returns:
-            The updated task with labels
+            The created label-task relation
         """
-        return client.set_task_labels(task_id, label_ids)
+        return client.add_label_to_task(task_id, label_id)
+
+    @mcp.tool()
+    def add_labels_to_task(task_id: int, label_ids: list[int]) -> list:
+        """Associate multiple labels to a task. Makes one API call per label.
+
+        Args:
+            task_id: The ID of the task
+            label_ids: List of label IDs to associate
+
+        Returns:
+            List of created label-task relations
+        """
+        return client.add_labels_to_task(task_id, label_ids)
 
     @mcp.tool()
     def remove_label_from_task(task_id: int) -> bool:
@@ -143,6 +156,22 @@ def register_tools(mcp, client):
             True if labels were removed
         """
         return client.remove_task_labels(task_id)
+
+    @mcp.tool()
+    def remove_label_from_task_single(task_id: int, label_id: int) -> bool:
+        """Remove a single label from a task.
+
+        Note: Uses DELETE method. May fail if the Vikunja server
+        only allows GET and PUT methods.
+
+        Args:
+            task_id: The ID of the task
+            label_id: The ID of the label to remove
+
+        Returns:
+            True if the label was removed
+        """
+        return client.remove_task_label(task_id, label_id)
 
     @mcp.tool()
     def list_task_attachments(task_id: int) -> list:

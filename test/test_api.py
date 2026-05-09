@@ -237,24 +237,53 @@ def test_get_project_stats(mock_request, client):
 
 
 @patch("requests.Session.request")
-def test_set_task_labels(mock_request, client):
+def test_add_label_to_task(mock_request, client):
     mock_response = Mock()
-    mock_response.json.return_value = {"id": 1, "title": "Task with labels", "labels": [1, 2]}
+    mock_response.json.return_value = {"task_id": 1, "label_id": 5}
     mock_response.raise_for_status = Mock()
     mock_request.return_value = mock_response
 
-    result = client.set_task_labels(1, [1, 2])
+    result = client.add_label_to_task(1, 5)
 
     mock_request.assert_called_once_with(
         "PUT",
         "https://vikunja.example.com/api/v1/tasks/1/labels",
-        json={"labels": [1, 2]}
+        json={"label_id": 5}
     )
-    assert result["labels"] == [1, 2]
+    assert result["label_id"] == 5
 
 
 @patch("requests.Session.request")
-def test_remove_task_labels(mock_request, client):
+def test_add_labels_to_task(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"task_id": 1, "label_id": 1}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.add_labels_to_task(1, [1, 2, 3])
+
+    assert mock_request.call_count == 3
+    assert len(result) == 3
+
+
+@patch("requests.Session.request")
+def test_remove_task_label(mock_request, client):
+    mock_response = Mock()
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.remove_task_label(1, 5)
+
+    mock_request.assert_called_once_with(
+        "DELETE",
+        "https://vikunja.example.com/api/v1/tasks/1/labels",
+        json={"label_id": 5}
+    )
+    assert result is True
+
+
+@patch("requests.Session.request")
+def test_remove_task_labels_all(mock_request, client):
     mock_response = Mock()
     mock_response.raise_for_status = Mock()
     mock_request.return_value = mock_response

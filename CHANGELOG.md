@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.7] - 2026-05-09
+
+### Fixed
+
+- `add_label_to_task`: body now uses `{"label_id": int}` instead of `{"labels": [...]}` (API requires single label per request)
+- `remove_label_from_task(task_id)`: now correctly removes all labels (no body)
+
+### Added
+
+- `add_labels_to_task(task_id, label_ids)`: associate multiple labels (one API call per label)
+- `remove_label_from_task_single(task_id, label_id)`: remove a single specific label from a task
+
+### Changed
+
+- `add_label_to_task(task_id, label_ids)` → `add_label_to_task(task_id, label_id)` (signature changed to single label)
+
 ## [0.0.6] - 2026-05-09
 
 ### Added

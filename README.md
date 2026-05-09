@@ -1,6 +1,6 @@
 # vikunja-mcp
 
-**Version:** 0.0.6
+**Version:** 0.0.7
 
 MCP (Model Context Protocol) server that connects an AI agent (OpenCode) to [Vikunja](https://vikunja.io/) project management system via its REST API.
 

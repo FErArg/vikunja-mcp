@@ -84,7 +84,9 @@ This MCP client is designed to work with Vikunja servers that only allow GET and
 | Update label | PUT | `/labels/{id}` |
 | Add comment | PUT | `/tasks/{id}/comments` |
 | Set task labels | PUT | `/tasks/{id}/labels` |
-| Remove task labels | DELETE | `/tasks/{id}/labels` |
+| Set task labels | PUT | `/tasks/{id}/labels` | body: `{"label_id": int}` |
+| Remove all task labels | DELETE | `/tasks/{id}/labels` | no body |
+| Remove single task label | DELETE | `/tasks/{id}/labels` | body: `{"label_id": int}` |
 | Get service info | GET | `/info` |
 | List all tasks | GET | `/tasks` |
 | List project members | GET | `/projects/{id}/projectusers` |

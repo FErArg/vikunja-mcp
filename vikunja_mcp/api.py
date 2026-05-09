@@ -117,11 +117,20 @@ class VikunjaClient:
     def get_project_stats(self, project_id: int) -> dict:
         return self.get(f"/projects/{project_id}/statistics")
 
-    def set_task_labels(self, task_id: int, label_ids: list) -> dict:
-        return self.put(f"/tasks/{task_id}/labels", json={"labels": label_ids})
+    def add_label_to_task(self, task_id: int, label_id: int) -> dict:
+        return self.put(f"/tasks/{task_id}/labels", json={"label_id": label_id})
+
+    def add_labels_to_task(self, task_id: int, label_ids: list) -> list:
+        results = []
+        for label_id in label_ids:
+            results.append(self.add_label_to_task(task_id, label_id))
+        return results
 
     def remove_task_labels(self, task_id: int) -> bool:
         return self.delete(f"/tasks/{task_id}/labels")
+
+    def remove_task_label(self, task_id: int, label_id: int) -> bool:
+        return self.delete(f"/tasks/{task_id}/labels", json={"label_id": label_id})
 
     def get_service_info(self) -> dict:
         return self.get("/info")
