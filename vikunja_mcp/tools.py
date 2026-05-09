@@ -117,6 +117,34 @@ def register_tools(mcp, client):
         return client.delete_label(label_id)
 
     @mcp.tool()
+    def add_label_to_task(task_id: int, label_ids: list[int]) -> dict:
+        """Associate labels to a task. Replaces all existing labels on the task.
+
+        Args:
+            task_id: The ID of the task
+            label_ids: List of label IDs to associate with the task
+
+        Returns:
+            The updated task with labels
+        """
+        return client.set_task_labels(task_id, label_ids)
+
+    @mcp.tool()
+    def remove_label_from_task(task_id: int) -> bool:
+        """Remove all labels from a task.
+
+        Note: Uses DELETE method. May fail if the Vikunja server
+        only allows GET and PUT methods.
+
+        Args:
+            task_id: The ID of the task
+
+        Returns:
+            True if labels were removed
+        """
+        return client.remove_task_labels(task_id)
+
+    @mcp.tool()
     def list_task_attachments(task_id: int) -> list:
         return client.list_task_attachments(task_id)
 

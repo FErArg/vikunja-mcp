@@ -5,7 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.0.4] - 2026-05-09
+## [0.0.5] - 2026-05-09
+
+### Added
+
+- `add_label_to_task(task_id, label_ids)` — Associate labels to a task via PUT /tasks/{id}/labels
+- `remove_label_from_task(task_id)` — Remove all labels from a task via DELETE /tasks/{id}/labels
+
+### Limitations
+
+- `add_label_to_task` replaces all existing labels on the task (PUT overwrites)
+- `remove_label_from_task` uses DELETE method and may fail on PUT-only Vikunja servers
 
 ### Changed
 

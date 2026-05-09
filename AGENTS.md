@@ -60,5 +60,7 @@ Vikunja servers that only allow GET and PUT methods require all create/update op
 | PUT | `/labels` | Create label |
 | PUT | `/tasks/{id}/comments` | Add comment |
 | PUT | `/tasks/{id}/attachments` | Upload attachment |
+| PUT | `/tasks/{id}/labels` | Set task labels |
+| DELETE | `/tasks/{id}/labels` | Remove all labels from task (may fail on PUT-only servers) |
 | POST | `/tasks/bulk` | Bulk update (not available if POST disabled) |
 | POST | `/notifications/read_all` | Mark all read (not available if POST disabled) |

@@ -116,3 +116,9 @@ class VikunjaClient:
 
     def get_project_stats(self, project_id: int) -> dict:
         return self.get(f"/projects/{project_id}/statistics")
+
+    def set_task_labels(self, task_id: int, label_ids: list) -> dict:
+        return self.put(f"/tasks/{task_id}/labels", json={"labels": label_ids})
+
+    def remove_task_labels(self, task_id: int) -> bool:
+        return self.delete(f"/tasks/{task_id}/labels")

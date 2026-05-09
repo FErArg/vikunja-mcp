@@ -234,3 +234,32 @@ def test_get_project_stats(mock_request, client):
 
     mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/projects/1/statistics")
     assert result["total_tasks"] == 10
+
+
+@patch("requests.Session.request")
+def test_set_task_labels(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "Task with labels", "labels": [1, 2]}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.set_task_labels(1, [1, 2])
+
+    mock_request.assert_called_once_with(
+        "PUT",
+        "https://vikunja.example.com/api/v1/tasks/1/labels",
+        json={"labels": [1, 2]}
+    )
+    assert result["labels"] == [1, 2]
+
+
+@patch("requests.Session.request")
+def test_remove_task_labels(mock_request, client):
+    mock_response = Mock()
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.remove_task_labels(1)
+
+    mock_request.assert_called_once_with("DELETE", "https://vikunja.example.com/api/v1/tasks/1/labels")
+    assert result is True
