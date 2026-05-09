@@ -122,3 +122,27 @@ class VikunjaClient:
 
     def remove_task_labels(self, task_id: int) -> bool:
         return self.delete(f"/tasks/{task_id}/labels")
+
+    def get_service_info(self) -> dict:
+        return self.get("/info")
+
+    def list_tasks_all(self, page: int = 1) -> list:
+        return self.get("/tasks", params={"page": page})
+
+    def list_project_members(self, project_id: int) -> list:
+        return self.get(f"/projects/{project_id}/projectusers")
+
+    def add_user_to_project(self, project_id: int, user_id: int, perm: int = 1) -> dict:
+        return self.put(f"/projects/{project_id}/projectusers", json={"user_id": user_id, "perm": perm})
+
+    def list_teams(self, page: int = 1) -> list:
+        return self.get("/teams", params={"page": page})
+
+    def get_team(self, team_id: int) -> dict:
+        return self.get(f"/teams/{team_id}")
+
+    def create_team(self, name: str) -> dict:
+        return self.put("/teams", json={"name": name})
+
+    def delete_team(self, team_id: int) -> bool:
+        return self.delete(f"/teams/{team_id}")

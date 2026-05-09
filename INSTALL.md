@@ -85,6 +85,14 @@ This MCP client is designed to work with Vikunja servers that only allow GET and
 | Add comment | PUT | `/tasks/{id}/comments` |
 | Set task labels | PUT | `/tasks/{id}/labels` |
 | Remove task labels | DELETE | `/tasks/{id}/labels` |
+| Get service info | GET | `/info` |
+| List all tasks | GET | `/tasks` |
+| List project members | GET | `/projects/{id}/projectusers` |
+| Add user to project | PUT | `/projects/{id}/projectusers` |
+| List teams | GET | `/teams` |
+| Get team | GET | `/teams/{id}` |
+| Create team | PUT | `/teams` |
+| Delete team | DELETE | `/teams/{id}` |
 | List projects/tasks/labels | GET | varies |
 
 **Not supported** (requires POST or DELETE on some Vikunja servers):

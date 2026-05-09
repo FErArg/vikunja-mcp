@@ -62,5 +62,13 @@ Vikunja servers that only allow GET and PUT methods require all create/update op
 | PUT | `/tasks/{id}/attachments` | Upload attachment |
 | PUT | `/tasks/{id}/labels` | Set task labels |
 | DELETE | `/tasks/{id}/labels` | Remove all labels from task (may fail on PUT-only servers) |
+| GET | `/info` | Get Vikunja service info (version, frontend URL) |
+| GET | `/tasks` | List all tasks (across all projects) |
+| GET | `/projects/{id}/projectusers` | List project members |
+| PUT | `/projects/{id}/projectusers` | Add user to project |
+| GET | `/teams` | List teams |
+| GET | `/teams/{id}` | Get team |
+| PUT | `/teams` | Create team |
+| DELETE | `/teams/{id}` | Delete team (may fail on PUT-only servers) |
 | POST | `/tasks/bulk` | Bulk update (not available if POST disabled) |
 | POST | `/notifications/read_all` | Mark all read (not available if POST disabled) |

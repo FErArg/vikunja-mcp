@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.6] - 2026-05-09
+
+### Added
+
+- `get_service_info()` — Get Vikunja service info (version, frontend URL, MOTD)
+- `list_tasks_all(page)` — List all tasks across all projects
+- `list_project_members(project_id)` — List users with access to a project
+- `add_user_to_project(project_id, user_id, perm)` — Add user to project with permissions
+- `list_teams(page)` — List all teams the current user is part of
+- `get_team(team_id)` — Get a team by ID
+- `create_team(name)` — Create a new team
+- `delete_team(team_id)` — Delete a team
+
+### Limitations
+
+- `delete_team` uses DELETE method and may fail on PUT-only Vikunja servers
+
 ## [0.0.5] - 2026-05-09
 
 ### Added

@@ -179,3 +179,101 @@ def register_tools(mcp, client):
     @mcp.tool()
     def get_project_stats(project_id: int) -> dict:
         return client.get_project_stats(project_id)
+
+    @mcp.tool()
+    def get_service_info() -> dict:
+        """Get Vikunja service info (version, frontend URL, MOTD, settings).
+
+        Returns:
+            Service information about the Vikunja instance
+        """
+        return client.get_service_info()
+
+    @mcp.tool()
+    def list_tasks_all(page: int = 1) -> list:
+        """List all tasks the current user has access to across all projects.
+
+        Args:
+            page: Page number for pagination
+
+        Returns:
+            List of all tasks
+        """
+        return client.list_tasks_all(page)
+
+    @mcp.tool()
+    def list_project_members(project_id: int) -> list:
+        """List all users with access to a project.
+
+        Args:
+            project_id: The project ID
+
+        Returns:
+            List of users on the project
+        """
+        return client.list_project_members(project_id)
+
+    @mcp.tool()
+    def add_user_to_project(project_id: int, user_id: int, perm: int = 1) -> dict:
+        """Add a user to a project with specified permissions.
+
+        Args:
+            project_id: The project ID
+            user_id: The user ID to add
+            perm: Permission level (0=read only, 1=read/write, 2=admin). Default 1.
+
+        Returns:
+            The updated project user relation
+        """
+        return client.add_user_to_project(project_id, user_id, perm)
+
+    @mcp.tool()
+    def list_teams(page: int = 1) -> list:
+        """List all teams the current user is part of.
+
+        Args:
+            page: Page number for pagination
+
+        Returns:
+            List of teams
+        """
+        return client.list_teams(page)
+
+    @mcp.tool()
+    def get_team(team_id: int) -> dict:
+        """Get a team by its ID.
+
+        Args:
+            team_id: The team ID
+
+        Returns:
+            The team details
+        """
+        return client.get_team(team_id)
+
+    @mcp.tool()
+    def create_team(name: str) -> dict:
+        """Create a new team.
+
+        Args:
+            name: The team name
+
+        Returns:
+            The created team
+        """
+        return client.create_team(name)
+
+    @mcp.tool()
+    def delete_team(team_id: int) -> bool:
+        """Delete a team.
+
+        Note: Uses DELETE method. May fail if the Vikunja server
+        only allows GET and PUT methods.
+
+        Args:
+            team_id: The team ID to delete
+
+        Returns:
+            True if deleted successfully
+        """
+        return client.delete_team(team_id)
