@@ -1,0 +1,236 @@
+import pytest
+from unittest.mock import Mock, patch
+from vikunja_mcp.api import VikunjaClient
+
+
+@pytest.fixture
+def client():
+    return VikunjaClient(
+        api_base_url="https://vikunja.example.com/api/v1",
+        headers={"Authorization": "Token test-token", "Content-Type": "application/json"}
+    )
+
+
+def test_api_base_url(client):
+    assert client.api_base_url == "https://vikunja.example.com/api/v1"
+
+
+def test_headers(client):
+    assert client.headers["Authorization"] == "Token test-token"
+
+
+@patch("requests.Session.request")
+def test_list_projects(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = [{"id": 1, "title": "Test Project"}]
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.list_projects(page=1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/projects", params={"page": 1})
+    assert result == [{"id": 1, "title": "Test Project"}]
+
+
+@patch("requests.Session.request")
+def test_get_project(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "Test Project"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.get_project(1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/projects/1")
+    assert result == {"id": 1, "title": "Test Project"}
+
+
+@patch("requests.Session.request")
+def test_create_project(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "New Project"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.create_project({"title": "New Project", "description": "A test project"})
+
+    mock_request.assert_called_once_with(
+        "POST",
+        "https://vikunja.example.com/api/v1/projects",
+        json={"title": "New Project", "description": "A test project"}
+    )
+    assert result["id"] == 1
+
+
+@patch("requests.Session.request")
+def test_update_project(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "Updated Title"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.update_project(1, {"title": "Updated Title"})
+
+    mock_request.assert_called_once_with(
+        "PUT",
+        "https://vikunja.example.com/api/v1/projects/1",
+        json={"title": "Updated Title"}
+    )
+    assert result["title"] == "Updated Title"
+
+
+@patch("requests.Session.request")
+def test_delete_project(mock_request, client):
+    mock_response = Mock()
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.delete_project(1)
+
+    mock_request.assert_called_once_with("DELETE", "https://vikunja.example.com/api/v1/projects/1")
+    assert result is True
+
+
+@patch("requests.Session.request")
+def test_list_tasks(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = [{"id": 1, "title": "Task 1"}]
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.list_tasks(1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/projects/1/tasks", params={"page": 1})
+    assert len(result) == 1
+
+
+@patch("requests.Session.request")
+def test_get_task(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "Test Task"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.get_task(1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/tasks/1")
+    assert result["title"] == "Test Task"
+
+
+@patch("requests.Session.request")
+def test_create_task(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "title": "New Task", "project_id": 1}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.create_task({"title": "New Task", "project_id": 1})
+
+    mock_request.assert_called_once_with(
+        "POST",
+        "https://vikunja.example.com/api/v1/tasks",
+        json={"title": "New Task", "project_id": 1}
+    )
+    assert result["project_id"] == 1
+
+
+@patch("requests.Session.request")
+def test_delete_task(mock_request, client):
+    mock_response = Mock()
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.delete_task(1)
+
+    mock_request.assert_called_once_with("DELETE", "https://vikunja.example.com/api/v1/tasks/1")
+    assert result is True
+
+
+@patch("requests.Session.request")
+def test_get_task_comments(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = [{"id": 1, "content": "A comment"}]
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.get_task_comments(1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/tasks/1/comments")
+    assert len(result) == 1
+
+
+@patch("requests.Session.request")
+def test_add_comment(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "content": "New comment"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.add_comment(1, {"comment": "New comment"})
+
+    mock_request.assert_called_once_with(
+        "POST",
+        "https://vikunja.example.com/api/v1/tasks/1/comments",
+        json={"comment": "New comment"}
+    )
+    assert result["content"] == "New comment"
+
+
+@patch("requests.Session.request")
+def test_list_notifications(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = [{"id": 1, "message": "You were assigned a task"}]
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.list_notifications(page=1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/notifications", params={"page": 1})
+    assert len(result) == 1
+
+
+@patch("requests.Session.request")
+def test_read_notification(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"id": 1, "status": "read"}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.read_notification(1)
+
+    mock_request.assert_called_once_with(
+        "PATCH",
+        "https://vikunja.example.com/api/v1/notifications/1",
+        json={"status": "read"}
+    )
+    assert result["status"] == "read"
+
+
+@patch("requests.Session.request")
+def test_search_tasks(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = [{"id": 1, "title": "Found task"}]
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.search_tasks("test query", project_id=1)
+
+    mock_request.assert_called_once_with(
+        "POST",
+        "https://vikunja.example.com/api/v1/tasks/search",
+        json={"query": "test query", "project_id": 1}
+    )
+    assert len(result) == 1
+
+
+@patch("requests.Session.request")
+def test_get_project_stats(mock_request, client):
+    mock_response = Mock()
+    mock_response.json.return_value = {"total_tasks": 10, "done_tasks": 5}
+    mock_response.raise_for_status = Mock()
+    mock_request.return_value = mock_response
+
+    result = client.get_project_stats(1)
+
+    mock_request.assert_called_once_with("GET", "https://vikunja.example.com/api/v1/projects/1/statistics")
+    assert result["total_tasks"] == 10
