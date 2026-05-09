@@ -70,6 +70,31 @@ Make sure `~/.config/opencode/opencode.json` contains the `vikunja-mcp` entry un
 cat ~/.config/opencode/opencode.json | grep -A5 "vikunja-mcp"
 ```
 
+## API Limitations
+
+This MCP client is designed to work with Vikunja servers that only allow GET and PUT methods (POST is disabled). All create and update operations use PUT:
+
+| Operation | HTTP Method | Endpoint |
+|-----------|-------------|----------|
+| Create project | PUT | `/projects` |
+| Update project | PUT | `/projects/{id}` |
+| Create task | PUT | `/projects/{id}/tasks` |
+| Update task | PUT | `/tasks/{id}` |
+| Create label | PUT | `/labels` |
+| Update label | PUT | `/labels/{id}` |
+| Add comment | PUT | `/tasks/{id}/comments` |
+| List projects/tasks/labels | GET | varies |
+
+**Not supported** (requires POST or DELETE on some Vikunja servers):
+
+| Operation | Reason |
+|-----------|--------|
+| Bulk task updates | Uses `POST /tasks/bulk` |
+| Mark all notifications read | Uses `POST /notifications/read_all` |
+| Delete subscriptions | Uses `DELETE /subscriptions/{entity}/{id}` |
+
+If your Vikunja server supports POST, these operations would also work normally.
+
 ## Uninstallation
 
 ```bash

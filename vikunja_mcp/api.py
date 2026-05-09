@@ -38,7 +38,7 @@ class VikunjaClient:
         return self.get(f"/projects/{project_id}")
 
     def create_project(self, data: dict) -> dict:
-        return self.post("/projects", json=data)
+        return self.put("/projects", json=data)
 
     def update_project(self, project_id: int, data: dict) -> dict:
         return self.put(f"/projects/{project_id}", json=data)
@@ -53,7 +53,10 @@ class VikunjaClient:
         return self.get(f"/tasks/{task_id}")
 
     def create_task(self, data: dict) -> dict:
-        return self.post("/tasks", json=data)
+        project_id = data.get("project_id")
+        if not project_id:
+            raise ValueError("project_id is required in data for create_task")
+        return self.put(f"/projects/{project_id}/tasks", json=data)
 
     def update_task(self, task_id: int, data: dict) -> dict:
         return self.put(f"/tasks/{task_id}", json=data)
@@ -65,7 +68,7 @@ class VikunjaClient:
         return self.get(f"/tasks/{task_id}/comments")
 
     def add_comment(self, task_id: int, data: dict) -> dict:
-        return self.post(f"/tasks/{task_id}/comments", json=data)
+        return self.put(f"/tasks/{task_id}/comments", json=data)
 
     def list_labels(self, project_id: Optional[int] = None) -> list:
         if project_id:
@@ -76,7 +79,7 @@ class VikunjaClient:
         return self.get(f"/labels/{label_id}")
 
     def create_label(self, data: dict) -> dict:
-        return self.post("/labels", json=data)
+        return self.put("/labels", json=data)
 
     def update_label(self, label_id: int, data: dict) -> dict:
         return self.put(f"/labels/{label_id}", json=data)
@@ -88,7 +91,7 @@ class VikunjaClient:
         return self.get(f"/tasks/{task_id}/attachments")
 
     def upload_attachment(self, task_id: int, file_data: dict) -> dict:
-        return self.post(f"/tasks/{task_id}/attachments", json=file_data)
+        return self.put(f"/tasks/{task_id}/attachments", json=file_data)
 
     def delete_attachment(self, task_id: int, attachment_id: int) -> bool:
         return self.delete(f"/tasks/{task_id}/attachments/{attachment_id}")

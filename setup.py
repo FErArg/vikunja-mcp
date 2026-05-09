@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="vikunja_mcp",
-    version="0.0.3",
+    version="0.0.4",
     description="MCP server for Vikunja project management API",
     packages=find_packages(),
     requires_python=">=3.11",

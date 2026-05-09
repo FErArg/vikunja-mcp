@@ -48,3 +48,17 @@ Unit tests in `test/`:
 - Config file path passed as argument to server, never hardcoded
 - install.sh must run from the repo directory (uses `SCRIPT_DIR` to locate vikunja_mcp package and run_mcp.sh)
 - vikunja_mcp package installed via `pip install -e` in editable mode
+
+## API Limitations
+
+Vikunja servers that only allow GET and PUT methods require all create/update operations to use PUT:
+
+| Method | Endpoint | Action |
+|--------|----------|--------|
+| PUT | `/projects` | Create project |
+| PUT | `/projects/{id}/tasks` | Create task |
+| PUT | `/labels` | Create label |
+| PUT | `/tasks/{id}/comments` | Add comment |
+| PUT | `/tasks/{id}/attachments` | Upload attachment |
+| POST | `/tasks/bulk` | Bulk update (not available if POST disabled) |
+| POST | `/notifications/read_all` | Mark all read (not available if POST disabled) |

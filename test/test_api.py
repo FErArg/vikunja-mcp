@@ -55,7 +55,7 @@ def test_create_project(mock_request, client):
     result = client.create_project({"title": "New Project", "description": "A test project"})
 
     mock_request.assert_called_once_with(
-        "POST",
+        "PUT",
         "https://vikunja.example.com/api/v1/projects",
         json={"title": "New Project", "description": "A test project"}
     )
@@ -127,8 +127,8 @@ def test_create_task(mock_request, client):
     result = client.create_task({"title": "New Task", "project_id": 1})
 
     mock_request.assert_called_once_with(
-        "POST",
-        "https://vikunja.example.com/api/v1/tasks",
+        "PUT",
+        "https://vikunja.example.com/api/v1/projects/1/tasks",
         json={"title": "New Task", "project_id": 1}
     )
     assert result["project_id"] == 1
@@ -169,7 +169,7 @@ def test_add_comment(mock_request, client):
     result = client.add_comment(1, {"comment": "New comment"})
 
     mock_request.assert_called_once_with(
-        "POST",
+        "PUT",
         "https://vikunja.example.com/api/v1/tasks/1/comments",
         json={"comment": "New comment"}
     )
